@@ -19,11 +19,11 @@ export default function NavBar() {
              <Button variant="link">Home</Button>
            </Link>
          </li>
-         <li>
+         {/* <li>
            <Link href="/job">
              <Button variant="link">Jobs</Button>
            </Link>
-         </li>
+         </li> */}
          {/* <li>
            <Link href="/contact">
              <Button variant="link">Contact</Button>

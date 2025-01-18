@@ -2,6 +2,7 @@
 
 import { useUser } from '@auth0/nextjs-auth0/client';
 import Image from 'next/image';
+import { Button } from '@/components/ui/button';
 
 export default function Profile() {
   const { user } = useUser();
@@ -23,6 +24,9 @@ export default function Profile() {
         />
       <p className="mt-2 text-lg">{user.name}</p>
       <p className="text-sm text-gray-500">{user.email}</p>
+      <Button className="mt-4 bg-red-600 hover:bg-red-700 text-white">
+        Delete Account
+      </Button>
     </div>
   );
 }

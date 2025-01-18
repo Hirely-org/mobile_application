@@ -1,4 +1,12 @@
 // app/api/auth/[auth0]/route.js
-import { handleAuth } from '@auth0/nextjs-auth0';
+import { handleAuth, handleLogin } from '@auth0/nextjs-auth0';
 
-export const GET = handleAuth();
+// Default handler for all Auth0 routes (login, logout, callback, etc.)
+export const GET = handleAuth({
+  login: async (req) =>
+    handleLogin(req, {
+      authorizationParams: {
+        prompt: 'login', // 🔹 Forces login page to appear every time
+      },
+    }),
+});

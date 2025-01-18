@@ -27,7 +27,7 @@ export default function JobDetails({ params }: { params: { id: string } }) {
   useEffect(() => {
     const fetchToken = async () => {
       try {
-        const res = await fetch('/login');  // Make sure this is the correct path
+        const res = await fetch('/token');  // Make sure this is the correct path
         if (!res.ok) throw new Error('Failed to fetch token');
 
         const data = await res.json();

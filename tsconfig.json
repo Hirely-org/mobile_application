@@ -35,7 +35,7 @@
     "components/*",
     "next-env.d.ts",
     ".next/types/**/*.ts"
-, "app/login/route.js"  ],
+, "app/token/route.js"  ],
   "exclude": [
     "node_modules"
   ]

@@ -30,7 +30,7 @@ export default function Home() {
 
     (async () => {
       try {
-        const res = await fetch('/login');
+        const res = await fetch('/token');
         if (!res.ok) throw new Error('Failed to fetch token');
 
         const data = await res.json();
