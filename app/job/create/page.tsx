@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Upload } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast'; // Make sure to install react-hot-toast
 
 interface FormData {
     name: string;
@@ -18,6 +20,8 @@ interface FormData {
 }
 
 const CreateJobPage = () => {
+    const router = useRouter();
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState<FormData>({
         name: '',
         description: '',
@@ -46,10 +50,23 @@ const CreateJobPage = () => {
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
+            // Validate file size (10MB limit)
+            if (file.size > 10 * 1024 * 1024) {
+                toast.error('Image size must be less than 10MB');
+                return;
+            }
+
+            // Validate file type
+            if (!file.type.startsWith('image/')) {
+                toast.error('Please upload an image file');
+                return;
+            }
+
             setFormData(prev => ({
                 ...prev,
                 image: file
             }));
+            
             // Create preview URL
             const reader = new FileReader();
             reader.onloadend = () => {
@@ -61,8 +78,45 @@ const CreateJobPage = () => {
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // Here you would implement the actual form submission
-        console.log('Form submitted:', formData);
+        setLoading(true);
+
+        try {
+            const tokenRes = await fetch('/token');
+            if (!tokenRes.ok) {
+                throw new Error('Failed to fetch authentication token');
+            }
+            const tokenData = await tokenRes.json();
+
+            const formDataToSend = new FormData();
+            formDataToSend.append('name', formData.name);
+            formDataToSend.append('description', formData.description);
+            formDataToSend.append('status', formData.status);
+            
+            if (formData.image) {
+                formDataToSend.append('image', formData.image);
+            }
+
+            const response = await fetch(`http://localhost:8000/jobWrite`, {
+                method: 'POST',
+                body: formDataToSend,
+                headers: {
+                    'Authorization': `Bearer ${tokenData.idToken}`,
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to create job');
+            }
+
+            const result = await response.json();
+            toast.success('Job created successfully!');
+            router.push('/'); // Redirect to jobs list
+        } catch (error) {
+            console.error('Error creating job:', error);
+            toast.error('Failed to create job. Please try again.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -82,6 +136,7 @@ const CreateJobPage = () => {
                                 onChange={handleInputChange}
                                 placeholder="Enter job name"
                                 required
+                                disabled={loading}
                             />
                         </div>
 
@@ -95,6 +150,7 @@ const CreateJobPage = () => {
                                 placeholder="Enter job description"
                                 required
                                 className="min-h-32"
+                                disabled={loading}
                             />
                         </div>
 
@@ -103,6 +159,7 @@ const CreateJobPage = () => {
                             <Select
                                 value={formData.status}
                                 onValueChange={handleStatusChange}
+                                disabled={loading}
                             >
                                 <SelectTrigger>
                                     <SelectValue placeholder="Select status" />
@@ -124,15 +181,15 @@ const CreateJobPage = () => {
                                     accept="image/*"
                                     onChange={handleImageChange}
                                     className="hidden"
+                                    disabled={loading}
                                 />
                                 {imagePreview ? (
                                     <div className="relative w-full aspect-video">
                                         <Image
                                             src={imagePreview}
                                             alt="Preview"
-                                            layout="fill"
-                                            objectFit="cover"
-                                            className="rounded-lg"
+                                            fill
+                                            className="rounded-lg object-cover"
                                         />
                                         <button
                                             type="button"
@@ -141,6 +198,7 @@ const CreateJobPage = () => {
                                                 setFormData(prev => ({ ...prev, image: null }));
                                             }}
                                             className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600"
+                                            disabled={loading}
                                         >
                                             ✕
                                         </button>
@@ -162,8 +220,8 @@ const CreateJobPage = () => {
                             </div>
                         </div>
 
-                        <Button type="submit" className="w-full">
-                            Create Job
+                        <Button type="submit" className="w-full" disabled={loading}>
+                            {loading ? 'Creating...' : 'Create Job'}
                         </Button>
                     </form>
                 </CardContent>

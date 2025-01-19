@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Clock, Calendar } from "lucide-react";
+import ApplyButton from '@/components/ApplyButton';
 
 interface Job {
   id: number;
@@ -125,7 +126,12 @@ export default function JobDetails({ params }: { params: { id: string } }) {
             >
               Back to Jobs
             </Button>
-            <Button>Apply Now</Button>
+            {idToken && (
+              <ApplyButton 
+                jobId={params.id} 
+                idToken={idToken}
+              />
+            )}
           </CardContent>
         </Card>
       </div>
