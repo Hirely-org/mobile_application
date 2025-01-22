@@ -18,8 +18,14 @@ interface Job {
   originalImageUrl?: string;  // Add this
   processedImageUrl?: string; // Add this
 }
+interface PageProps {
+  params: {
+    id: string;
+  };
+  searchParams?: { [key: string]: string | string[] | undefined };
+}
 
-export default function JobDetails({ params }: { params: { id: string } }) {
+export default function JobDetails({ params }: PageProps) {
   const router = useRouter();
   const [job, setJob] = useState<Job | null>(null);
   const [loading, setLoading] = useState(true);
