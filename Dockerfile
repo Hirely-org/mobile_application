@@ -1,8 +1,23 @@
 FROM node:18-alpine AS builder
 WORKDIR /app
+
+# Add build essentials for potential native dependencies
+RUN apk add --no-cache libc6-compat python3 make g++
+
+# Copy package files
 COPY package*.json ./
-RUN npm ci
+
+# Install dependencies with verbose logging
+RUN npm ci --verbose
+
+# Copy source code
 COPY . .
+
+# Add environment variables needed for build
+ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_ENV production
+
+# Build with verbose output
 RUN npm run build
 
 FROM node:18-alpine AS runner
