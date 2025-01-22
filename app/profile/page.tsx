@@ -1,7 +1,7 @@
 'use client';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
@@ -11,7 +11,7 @@ import apiURL from '../../config';
 
 export default function Profile() {
   const { user } = useUser();
-  const router = useRouter();
+  // const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
   const [idToken, setIdToken] = useState<string | null>(null);
 

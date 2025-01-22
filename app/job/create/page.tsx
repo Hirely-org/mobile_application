@@ -109,7 +109,7 @@ const CreateJobPage = () => {
                 throw new Error('Failed to create job');
             }
 
-            const result = await response.json();
+            // const result = await response.json();
             toast.success('Job created successfully!');
             router.push('/'); // Redirect to jobs list
         } catch (error) {

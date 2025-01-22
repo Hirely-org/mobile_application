@@ -10,6 +10,7 @@ export const GET = withApiAuthRequired(async function GET(req) {
     console.log('Token:', session.idToken);
     return NextResponse.json({ idToken: session.idToken });
   } catch (error) {
+    console.error('Failed to get token:', error);
     return NextResponse.json({ error: 'Failed to get token' }, { status: 500 });
   }
 });

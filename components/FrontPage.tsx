@@ -4,6 +4,7 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button'; // Adjust to your button component path
 import { useEffect } from 'react';
+import Link from 'next/link';
 
 export default function LoginPage() {
   const { user, isLoading } = useUser();
@@ -28,11 +29,11 @@ export default function LoginPage() {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <h1 className="text-4xl font-bold mb-4">Welcome to Hirely</h1>
       <p className="mb-8">Your gateway to exciting job opportunities!</p>
-      <a href="/api/auth/login">
+      <Link href="/api/auth/login">
         <Button className="px-6 py-3 bg-blue-500 text-white rounded-lg">
           Log In
         </Button>
-      </a>
+      </Link>
     </div>
   );
 }
