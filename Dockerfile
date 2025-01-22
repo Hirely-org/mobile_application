@@ -9,7 +9,7 @@ RUN npm install
 COPY . .
 
 # Use Webpack instead of Turbopack for reliable builds
-RUN npm run build -- --no-turbopack || (echo "Build failed! Check logs for details." && exit 1)
+RUN npm run build
 
 EXPOSE 3000
 
