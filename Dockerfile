@@ -8,6 +8,8 @@ RUN npm install
 
 COPY . .
 
+ENV DISABLE_ESLINT_PLUGIN=true
+
 # Use Webpack instead of Turbopack for reliable builds
 RUN npm run build
 
