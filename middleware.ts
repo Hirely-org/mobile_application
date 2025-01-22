@@ -2,6 +2,7 @@
 import { withMiddlewareAuthRequired } from '@auth0/nextjs-auth0/edge';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import apiURL from './config';
 
 export default withMiddlewareAuthRequired(
   async function middleware(request: NextRequest) {
@@ -21,7 +22,7 @@ export default withMiddlewareAuthRequired(
       const { idToken } = await tokenResponse.json();
 
       // Then, fetch user data with the token
-      const userResponse = await fetch('http://localhost:8000/users/me', {
+      const userResponse = await fetch(`${apiURL}/users/me`, {
         headers: {
           'Authorization': `Bearer ${idToken}`,
         },

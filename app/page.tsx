@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button';
 import JobCard from '@/components/JobCard';
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
+import apiURL from '../config';
+
 
 type Job = {
   id: number;
@@ -14,7 +16,9 @@ type Job = {
   description: string;
   status: string;
   createdAt: string;
-  imageId?: string;
+  imageId?: string;  // Changed from imageId
+  originalImageUrl?: string;
+  processedImageUrl?: string;
 };
 
 export default function Home() {
@@ -48,11 +52,10 @@ export default function Home() {
       
       setIsLoading(true);
       try {
-        const response = await fetch('http://localhost:8000/jobread', {
+        const response = await fetch(`${apiURL}/jobRead`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${idToken}`,
-            'Content-Type': 'application/json'
           }
         });
     
@@ -60,16 +63,11 @@ export default function Home() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        // Get role from response header
-        console.log('Response:', response.headers.get('X-Forwarded-Role'));
-        console.log('All header keys:', [...response.headers.keys()]);
-        console.log('All header values:', [...response.headers.values()]);
-        console.log('All header entries:', [...response.headers.entries()]);
         const role = response.headers.get('X-Forwarded-Role');
-        console.log('Role:', role);
         setUserRole(role);
     
         const jobsData = await response.json();
+        console.log('Jobs with URLs:', jobsData);
         setJobs(jobsData);
       } catch (error) {
         console.error('Error fetching jobs:', error);

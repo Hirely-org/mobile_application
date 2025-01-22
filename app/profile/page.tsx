@@ -6,6 +6,8 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
 import { Loader2 } from "lucide-react";
+import apiURL from '../../config';
+
 
 export default function Profile() {
   const { user } = useUser();
@@ -41,7 +43,7 @@ export default function Profile() {
 
     setIsDeleting(true);
     try {
-      const response = await fetch('http://localhost:8000/users', {
+      const response = await fetch(`${apiURL}/users`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${idToken}`, // If needed

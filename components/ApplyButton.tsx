@@ -1,7 +1,10 @@
-// components/ApplyButton.tsx
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';  // Add this import
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
+import { toast } from 'react-hot-toast';
+import apiURL from '../config';
+
 
 interface ApplyButtonProps {
   jobId: string | number;
@@ -10,11 +13,12 @@ interface ApplyButtonProps {
 
 export default function ApplyButton({ jobId, idToken }: ApplyButtonProps) {
   const [isApplying, setIsApplying] = useState(false);
+  const router = useRouter();  // Add this
 
   const handleApply = async () => {
     setIsApplying(true);
     try {
-      const response = await fetch('http://localhost:8000/jobApplication', {
+      const response = await fetch(`${apiURL}/jobApplication`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${idToken}`,
@@ -23,14 +27,37 @@ export default function ApplyButton({ jobId, idToken }: ApplyButtonProps) {
         body: JSON.stringify({ jobId }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error('Failed to apply for job');
+        if (response.status === 409) {
+          toast({
+            title: "Already Applied",
+            description: data.message || "You have already applied to this job",
+            variant: "destructive",
+          });
+          return;
+        }
+        throw new Error(data.message || 'Failed to apply for job');
       }
 
-      alert('Successfully applied to job!');
+      toast({
+        title: "Application Submitted",
+        description: "Your job application was submitted successfully!",
+      });
+      
+      // Add slight delay before redirect to ensure toast is visible
+      setTimeout(() => {
+        router.push('/');  // Redirect to home page
+      }, 1500);
+
     } catch (error) {
       console.error('Error applying for job:', error);
-      alert('Failed to apply for job');
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : 'Failed to apply for job',
+        variant: "destructive",
+      });
     } finally {
       setIsApplying(false);
     }

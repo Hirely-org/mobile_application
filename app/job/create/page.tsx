@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Upload } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast'; // Make sure to install react-hot-toast
+import apiURL from '../../../config';
 
 interface FormData {
     name: string;
@@ -96,7 +97,7 @@ const CreateJobPage = () => {
                 formDataToSend.append('image', formData.image);
             }
 
-            const response = await fetch(`http://localhost:8000/jobWrite`, {
+            const response = await fetch(`${apiURL}/jobWrite`, {
                 method: 'POST',
                 body: formDataToSend,
                 headers: {

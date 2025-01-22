@@ -7,6 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Clock, Calendar } from "lucide-react";
 import ApplyButton from '@/components/ApplyButton';
+import Image from 'next/image';
+import apiURL from './config';
 
 interface Job {
   id: number;
@@ -15,6 +17,8 @@ interface Job {
   status: string;
   createdAt: string;
   imageId?: string;
+  originalImageUrl?: string;  // Add this
+  processedImageUrl?: string; // Add this
 }
 
 export default function JobDetails({ params }: { params: { id: string } }) {
@@ -23,6 +27,13 @@ export default function JobDetails({ params }: { params: { id: string } }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [idToken, setIdToken] = useState<string | null>(null);
+  const [imageError, setImageError] = useState(false);
+
+  const imageUrl = job && !imageError && job.processedImageUrl 
+  ? job.processedImageUrl 
+  : job?.originalImageUrl 
+  ? job.originalImageUrl 
+  : '/default-job-image.jpg';
 
   // Fetch token first
   useEffect(() => {
@@ -48,10 +59,9 @@ export default function JobDetails({ params }: { params: { id: string } }) {
       if (!idToken) return; // Don't fetch if we don't have the token
 
       try {
-        const response = await fetch(`http://localhost:8000/jobread/${params.id}`, {
+        const response = await fetch(`${apiURL}/jobRead/${params.id}`, {
           headers: {
             'Authorization': `Bearer ${idToken}`,
-            'Content-Type': 'application/json',
           },
         });
         
@@ -86,25 +96,22 @@ export default function JobDetails({ params }: { params: { id: string } }) {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto space-y-6">
-        {/* Header Card */}
+        {/* Add this Image Card */}
         <Card>
-          <CardHeader className="space-y-1">
-            <div className="flex items-center justify-between">
-              <div className="space-y-1">
-                <CardTitle className="text-3xl font-bold">{job.name}</CardTitle>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex gap-4">
-              <Badge variant="secondary" className="flex items-center gap-1">
-                <Clock className="h-3 w-3" /> {job.status}
-              </Badge>
-              <Badge variant="secondary" className="flex items-center gap-1">
-                <Calendar className="h-3 w-3" /> Posted {new Date(job.createdAt).toLocaleDateString()}
-              </Badge>
-            </div>
-          </CardContent>
+          <div className="relative w-full h-[400px]">
+            <Image
+              src={imageUrl}
+              alt={job?.name || 'Job image'}
+              fill
+              className="object-cover rounded-t-lg"
+              onError={() => {
+                if (imageUrl === job?.processedImageUrl) {
+                  setImageError(true);
+                }
+              }}
+              unoptimized={!!job?.processedImageUrl || !!job?.originalImageUrl}
+            />
+          </div>
         </Card>
 
         {/* Description Card */}
