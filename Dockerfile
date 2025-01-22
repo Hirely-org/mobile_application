@@ -24,4 +24,4 @@ COPY --from=builder /app/public ./public
 EXPOSE 3000
 
 # Use the standalone server instead of npm start
-CMD ["node", "server.js"]
+CMD ["npm", "start"]
