@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Clock, Calendar } from "lucide-react";
 import ApplyButton from '@/components/ApplyButton';
 import Image from 'next/image';
-import apiURL from './config';
+import apiURL from '../../../config';
 
 interface Job {
   id: number;
