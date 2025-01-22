@@ -1,19 +1,29 @@
-# Use the base Node.js image
-FROM node:18-alpine
+FROM node:18-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
 
-# Set the working directory
+ENV DISABLE_ESLINT_PLUGIN=true
+ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_ENV production
+
+RUN npm run build
+
+FROM node:18-alpine AS runner
 WORKDIR /app
 
-# Copy package files and install dependencies
-COPY package*.json ./
-RUN npm install --production
+ENV NODE_ENV production
+ENV NEXT_TELEMETRY_DISABLED 1
+ENV PORT 3000
+ENV HOSTNAME "0.0.0.0"
 
-# Copy the built standalone app
-COPY .next/standalone ./
-COPY .next/static ./static
+# Copy necessary files for standalone mode
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
 
-# Expose the app's port
 EXPOSE 3000
 
-# Run the standalone server
-CMD ["node", "server.js"]
+# Start the server with explicit host binding
+CMD ["node", "server.js", "-H", "0.0.0.0"]
