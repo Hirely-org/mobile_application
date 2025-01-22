@@ -1,59 +1,23 @@
-FROM node:18-alpine AS builder
+# Step 1: Use the official Node.js image as the base image
+FROM node:18-alpine
+
+# Step 2: Set the working directory
 WORKDIR /app
 
-# Add build essentials for potential native dependencies
-RUN apk add --no-cache libc6-compat python3 make g++
-
-# Copy package files
+# Step 3: Copy the package.json and package-lock.json (or yarn.lock) files
 COPY package*.json ./
 
-# Install dependencies with verbose logging
-RUN npm ci --verbose
+# Step 4: Install dependencies
+RUN npm install
 
-# Copy source code
+# Step 5: Copy the rest of the application code
 COPY . .
 
-# Add environment variables needed for build
-ENV NEXT_TELEMETRY_DISABLED 1
-ENV NODE_ENV production
-
-# Build with verbose output
+# Step 6: Build the Next.js application
 RUN npm run build
 
-FROM node:18-alpine AS runner
-WORKDIR /app
-
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
-
-# Copy necessary files and directories
-COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/node_modules ./node_modules
-
-# Config files from your tree
-COPY --from=builder /app/next.config.ts ./
-COPY --from=builder /app/next-env.d.ts ./
-COPY --from=builder /app/middleware.ts ./
-COPY --from=builder /app/tsconfig.json ./
-COPY --from=builder /app/postcss.config.mjs ./
-COPY --from=builder /app/tailwind.config.ts ./
-COPY --from=builder /app/config.js ./
-COPY --from=builder /app/components.json ./
-COPY --from=builder /app/eslint.config.mjs ./
-
-# Source directories
-COPY --from=builder /app/components ./components
-COPY --from=builder /app/hooks ./hooks
-COPY --from=builder /app/lib ./lib
-
-# Create and use non-root user
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-RUN chown -R nextjs:nodejs /app
-USER nextjs
-
+# Step 7: Expose the port on which the Next.js app runs
 EXPOSE 3000
 
+# Step 8: Start the application
 CMD ["npm", "start"]
