@@ -1,10 +1,10 @@
-# Step 1: Use the official Node.js image as the base image
+# Step 1: Use the official Node.js image as the base
 FROM node:18-alpine
 
-# Step 2: Set the working directory
+# Step 2: Set the working directory inside the container
 WORKDIR /app
 
-# Step 3: Copy the package.json and package-lock.json (or yarn.lock) files
+# Step 3: Copy package.json and lock file
 COPY package*.json ./
 
 # Step 4: Install dependencies
@@ -16,7 +16,7 @@ COPY . .
 # Step 6: Build the Next.js application
 RUN npm run build
 
-# Step 7: Expose the port on which the Next.js app runs
+# Step 7: Expose the port the app runs on
 EXPOSE 3000
 
 # Step 8: Start the application
