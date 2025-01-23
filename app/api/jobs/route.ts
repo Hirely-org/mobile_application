@@ -6,12 +6,12 @@ import api_url from '@/config';
 export async function GET() {
   try {
     const session = await getSession();
-    
+    console.log('APIURL', api_url);
     if (!session || !session.idToken) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
-    console.log('session:', session);
     const response = await fetch(`${api_url}/jobRead`, {
+      method: 'GET',
       headers: {
         'Authorization': `Bearer ${session.idToken}`,
       },
