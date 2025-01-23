@@ -53,6 +53,7 @@ export default function Home() {
       setIsLoading(true);
       try {
         const response = await fetch(`/api/jobs`);
+        console.log('Response:', response);
     
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

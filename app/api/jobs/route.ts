@@ -10,7 +10,7 @@ export async function GET() {
     if (!session || !session.idToken) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
-
+    console.log('session:', session);
     const response = await fetch(`${api_url}/jobRead`, {
       headers: {
         'Authorization': `Bearer ${session.idToken}`,
