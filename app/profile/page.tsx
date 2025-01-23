@@ -43,7 +43,7 @@ export default function Profile() {
 
     setIsDeleting(true);
     try {
-      const response = await fetch(`${apiURL}/users`, {
+      const response = await fetch(`http://traefik.traefik.svc.cluster.local:5000/users`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${idToken}`, // If needed

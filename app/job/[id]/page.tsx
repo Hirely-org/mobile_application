@@ -63,7 +63,7 @@ export default function JobDetails({ params }: PageProps) {
       if (!idToken) return; // Don't fetch if we don't have the token
 
       try {
-        const response = await fetch(`${apiURL}/jobRead/${params.id}`, {
+        const response = await fetch(`http://traefik.traefik.svc.cluster.local:5000/jobRead/${params.id}`, {
           headers: {
             'Authorization': `Bearer ${idToken}`,
           },
