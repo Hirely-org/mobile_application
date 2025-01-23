@@ -8,12 +8,12 @@ import { useState } from 'react';
 import { Loader2 } from "lucide-react";
 
 export default function Profile() {
-  const { user } = useUser();
+  // const { user } = useUser();
   const [isDeleting, setIsDeleting] = useState(false);
 
-  if (!user) {
-    return <p>You need to log in to view this page.</p>;
-  }
+  // if (!user) {
+  //   return <p>You need to log in to view this page.</p>;
+  // }
 
   const handleDeleteAccount = async () => {
     if (!confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
