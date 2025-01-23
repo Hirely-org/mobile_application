@@ -18,13 +18,27 @@ export async function GET() {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+        // Log more details about the error
+        console.error('Internal service response:', {
+          status: response.status,
+          statusText: response.statusText
+        });
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      return NextResponse.json(data);
+    } catch (error) {
+      // Log the full error details
+      console.error('Detailed API route error:', error);
+      return new NextResponse(
+        JSON.stringify({ message: 'Internal Server Error', error: error.message }), 
+        { 
+          status: 500,
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
     }
-
-    const data = await response.json();
-    return NextResponse.json(data);
-  } catch (error) {
-    console.error('API route error:', error);
-    return new NextResponse('Internal Server Error', { status: 500 });
   }
-}
