@@ -50,9 +50,9 @@ export default function NavBar() {
               <DropdownMenuItem asChild>
                 <Link href="/profile" prefetch>Profile</Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
+              {/* <DropdownMenuItem asChild>
                 <Link href="/api/auth/logout" prefetch>Logout</Link>
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
