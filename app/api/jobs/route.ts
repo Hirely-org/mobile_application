@@ -1,4 +1,4 @@
-// app/api/jobs/route.ts
+// app/api/jobs/route.tss
 import { getSession } from '@auth0/nextjs-auth0';
 import { NextResponse } from 'next/server';
 import api_url from '@/config';
