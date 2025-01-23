@@ -20,12 +20,10 @@ interface Job {
 }
 
 interface PageProps {
-  params: {
     id: string;
-  };
 }
 
-export default function JobDetailsClient({ params }: PageProps) {
+export default function JobDetailsClient({ id }: PageProps) {
   const router = useRouter();
   const [job, setJob] = useState<Job | null>(null);
   const [loading, setLoading] = useState(true);
@@ -58,9 +56,9 @@ export default function JobDetailsClient({ params }: PageProps) {
 
   useEffect(() => {
     const fetchJobDetails = async () => {
-      console.log("JOBDETAILSCLIENT",params.id);
+      console.log("JOBDETAILSCLIENT",id);
       try {
-        const response = await fetch(`/api/jobs/${params.id}`);
+        const response = await fetch(`/api/jobs/${id}`);
         
         if (!response.ok) {
           throw new Error('Job not found');
@@ -76,7 +74,7 @@ export default function JobDetailsClient({ params }: PageProps) {
     };
 
     fetchJobDetails();
-  }, [params.id]);
+  }, [id]);
 
   if (loading) {
     return (
@@ -127,7 +125,7 @@ export default function JobDetailsClient({ params }: PageProps) {
             >
               Back to Jobs
             </Button>
-            <ApplyButton jobId={params.id} idToken={idToken || ''}/>
+            <ApplyButton jobId={id} idToken={idToken || ''}/>
           </CardContent>
         </Card>
       </div>
