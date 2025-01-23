@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import JobCard from '@/components/JobCard';
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
-import apiURL from '../config';
+// import apiURL from '../config';
 
 
 type Job = {
@@ -23,41 +23,36 @@ type Job = {
 
 export default function Home() {
   const { user, isLoading: userLoading } = useUser();
-  const [idToken, setIdToken] = useState<string | null>(null);
+  // const [idToken, setIdToken] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!user) return;
+  // useEffect(() => {
+  //   if (!user) return;
 
-    (async () => {
-      try {
-        const res = await fetch('/token');
-        if (!res.ok) throw new Error('Failed to fetch token');
+  //   (async () => {
+  //     try {
+  //       const res = await fetch('/token');
+  //       if (!res.ok) throw new Error('Failed to fetch token');
 
-        const data = await res.json();
-        setIdToken(data.idToken);
-      } catch (error) {
-        console.error('Error fetching token:', error);
-        setError('Failed to fetch authentication token');
-      }
-    })();
-  }, [user]);
+  //       const data = await res.json();
+  //       setIdToken(data.idToken);
+  //     } catch (error) {
+  //       console.error('Error fetching token:', error);
+  //       setError('Failed to fetch authentication token');
+  //     }
+  //   })();
+  // }, [user]);
 
   useEffect(() => {
     const fetchJobs = async () => {
-      if (!idToken || !user) return;
+      // if (!idToken || !user) return;
       
       setIsLoading(true);
       try {
-        const response = await fetch(`${apiURL}/jobRead`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${idToken}`,
-          }
-        });
+        const response = await fetch(`/api/jobs`);
     
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -78,7 +73,7 @@ export default function Home() {
     };
 
     fetchJobs();
-  }, [idToken, user]);
+  }, [user]);
 
   if (userLoading) {
     return (
