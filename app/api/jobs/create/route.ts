@@ -6,11 +6,11 @@ import api_url from '@/config';
 export async function POST(request: Request) {
  try {
    const session = await getSession();
-   
+   console.log('APIURL', api_url);
    if (!session?.user) {
      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
    }
-
+   console.log('Session', session.idToken);
    const formData = await request.formData();
    
    const response = await fetch(`${api_url}/jobWrite`, {

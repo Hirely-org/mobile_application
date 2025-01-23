@@ -10,7 +10,7 @@ export async function GET() {
     if (!session || !session.idToken) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
-    const response = await fetch(`${api_url}/jobRead`, {
+    const response = await fetch(`http://traefik.traefik.svc.cluster.local:5000/jobRead`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${session.idToken}`,
