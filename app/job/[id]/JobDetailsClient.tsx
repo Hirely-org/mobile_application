@@ -58,6 +58,7 @@ export default function JobDetailsClient({ params }: PageProps) {
 
   useEffect(() => {
     const fetchJobDetails = async () => {
+      console.log("JOBDETAILSCLIENT",params.id);
       try {
         const response = await fetch(`/api/jobs/${params.id}`);
         

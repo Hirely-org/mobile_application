@@ -154,5 +154,6 @@
 import JobDetailsClient from './JobDetailsClient';
 
 export default async function JobDetailsPage({ params }: { params: { id: string } }) {
+  console.log('paramsJOBDETAISLPAGE:', params);
   return <JobDetailsClient params={params} />;
 }

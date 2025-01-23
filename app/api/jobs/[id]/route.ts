@@ -6,6 +6,7 @@ export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
+  console.log("ROUTEJOB",params.id);
   try {
     const session = await getSession();
     
