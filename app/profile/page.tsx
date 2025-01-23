@@ -8,9 +8,15 @@ import { useState } from 'react';
 import { Loader2 } from "lucide-react";
 
 export default function Profile() {
-  const { user } = useUser();
+  const { user, isLoading } = useUser();
   const [isDeleting, setIsDeleting] = useState(false);
 
+  console.log("PROFILE",user);
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+  
   if (!user) {
     return <p>You need to log in to view this page.</p>;
   }
