@@ -45,7 +45,7 @@
 #         run: |
 #           aws eks update-kubeconfig --region ${{ vars.AWS_DEFAULT_REGION }} --name ${{ vars.AWS_EKS_CLUSTER_NAME }}
 #           kubectl set image deployment/frontend-deployment frontend=${{env.IMG_NAME}}:${{steps.short-sha.outputs.sha}}
-#           kubectl rollout status deployment/frontend-deployment
+#           kubectl rollout status deployment/frontend-deploymentd
 
 name: Build and Deploy Frontend
 
