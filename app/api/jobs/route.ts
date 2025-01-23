@@ -7,13 +7,13 @@ export async function GET() {
   try {
     const session = await getSession();
     
-    if (!session || !session.accessToken) {
+    if (!session || !session.idToken) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
 
     const response = await fetch(`${api_url}/jobRead`, {
       headers: {
-        'Authorization': `Bearer ${session.accessToken}`,
+        'Authorization': `Bearer ${session.idToken}`,
       },
     });
 
