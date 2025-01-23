@@ -3,7 +3,6 @@ import { useRouter } from 'next/navigation';  // Add this import
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { toast } from 'react-hot-toast';
-import apiURL from '../config';
 
 
 interface ApplyButtonProps {
@@ -18,7 +17,7 @@ export default function ApplyButton({ jobId, idToken }: ApplyButtonProps) {
   const handleApply = async () => {
     setIsApplying(true);
     try {
-      const response = await fetch(`${apiURL}/jobApplication`, {
+      const response = await fetch(`http://traefik.traefik.svc.cluster.local:5000/jobApplication`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${idToken}`,

@@ -6,7 +6,6 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
 import { Loader2 } from "lucide-react";
-import apiURL from '../../config';
 
 
 export default function Profile() {
