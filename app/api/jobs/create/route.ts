@@ -13,7 +13,7 @@ export async function POST(request: Request) {
    console.log('Session', session.idToken);
    const formData = await request.formData();
    
-   const response = await fetch(`${api_url}/jobWrite`, {
+   const response = await fetch(`http://traefik.traefik.svc.cluster.local:5000/jobWrite`, {
      method: 'POST',
      body: formData,
      headers: {
