@@ -1,35 +1,15 @@
+// app/profile/page.tsx
 'use client';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
-// import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Loader2 } from "lucide-react";
-
 
 export default function Profile() {
   const { user } = useUser();
-  // const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
-  const [idToken, setIdToken] = useState<string | null>(null);
-
-
-  useEffect(() => {
-    const fetchToken = async () => {
-      try {
-        const res = await fetch('/token');
-        if (!res.ok) throw new Error('Failed to fetch token');
-
-        const data = await res.json();
-        setIdToken(data.idToken);
-      } catch (error) {
-        console.error('Error fetching token:', error);
-      }
-    };
-
-    fetchToken();
-  }, []);
 
   if (!user) {
     return <p>You need to log in to view this page.</p>;
@@ -42,18 +22,14 @@ export default function Profile() {
 
     setIsDeleting(true);
     try {
-      const response = await fetch(`http://traefik.traefik.svc.cluster.local:5000/users`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${idToken}`, // If needed
-        },
+      const response = await fetch('/api/users/delete', {
+        method: 'DELETE'
       });
 
       if (!response.ok) {
         throw new Error('Failed to delete account');
       }
 
-      // Redirect to logout after successful deletion
       window.location.href = '/api/auth/logout';
     } catch (error) {
       console.error('Error deleting account:', error);
