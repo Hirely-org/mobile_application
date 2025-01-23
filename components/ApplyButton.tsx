@@ -1,9 +1,11 @@
+// components/ApplyButton.tsx
+'use client';
+
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';  // Add this import
+import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { toast } from 'react-hot-toast';
-
 
 interface ApplyButtonProps {
   jobId: string | number;
@@ -12,15 +14,14 @@ interface ApplyButtonProps {
 
 export default function ApplyButton({ jobId, idToken }: ApplyButtonProps) {
   const [isApplying, setIsApplying] = useState(false);
-  const router = useRouter();  // Add this
+  const router = useRouter();
 
   const handleApply = async () => {
     setIsApplying(true);
     try {
-      const response = await fetch(`http://traefik.traefik.svc.cluster.local:5000/jobApplication`, {
+      const response = await fetch('/api/jobs/apply', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${idToken}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ jobId }),
@@ -45,9 +46,8 @@ export default function ApplyButton({ jobId, idToken }: ApplyButtonProps) {
         description: "Your job application was submitted successfully!",
       });
       
-      // Add slight delay before redirect to ensure toast is visible
       setTimeout(() => {
-        router.push('/');  // Redirect to home page
+        router.push('/');
       }, 1500);
 
     } catch (error) {
@@ -63,10 +63,7 @@ export default function ApplyButton({ jobId, idToken }: ApplyButtonProps) {
   };
 
   return (
-    <Button 
-      onClick={handleApply} 
-      disabled={isApplying}
-    >
+    <Button onClick={handleApply} disabled={isApplying}>
       {isApplying ? (
         <>
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
